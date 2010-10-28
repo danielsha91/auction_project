@@ -35,7 +35,7 @@ create table Bid (
     itemId integer not null,
     bidderId integer not null,
     bidTime date not null,
-    amount real not null,
+    price real not null,
     primary key (id)
     );
 
