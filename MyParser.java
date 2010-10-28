@@ -191,9 +191,105 @@ class MyParser {
     
 
     /**************************************************************/
-    
+    String sep = "<>";
+    String newline = System.getProperty("line.separator");
+    try {
+      BufferedWriter bwItem
+        = new BufferedWriter(new FileWriter("./Item_raw.dat", true));
+      BufferedWriter bwItemCategory
+        = new BufferedWriter(new FileWriter("./ItemCategory_raw.dat", true));
+      BufferedWriter bwAuctionUser
+        = new BufferedWriter(new FileWriter("./AuctionUser_raw.dat", true));
+      BufferedWriter bwBid
+        = new BufferedWriter(new FileWriter("./Bid_raw.dat", true));
+
+      Element docElement = doc.getDocumentElement();
+      Element[] items = getElementsByTagNameNR(docElement, "Item");
+      for (Element item : items) {
+  
+        String itemId = item.getAttribute("ItemID");
+  
+        String name   = getElementText(getElementByTagNameNR(item, "Name"));
+  
+        Element[] categoryElements = getElementsByTagNameNR(item, "Category");
+        for (Element categoryElement : categoryElements) {
+          String category = getElementText(categoryElement);
+  
+          // output to ItemCategory
+          //System.out.printf("ItemCategory %s<>%s\n", itemId, category);
+          bwItemCategory.write(itemId + sep + category + newline);
+        }
+  
+        String buyPrice = "NULL";
+        Element buyPriceElement = getElementByTagNameNR(item, "Buy_Price");
+        if (buyPriceElement != null) {
+            buyPrice = formatDollar(getElementText(buyPriceElement));
+        }
+  
+        String firstPrice = formatDollar(getElementText(getElementByTagNameNR(item, "First_Bid")));
+  
+        String started = formatTime(getElementText(getElementByTagNameNR(item, "Started")));
+        String ends = formatTime(getElementText(getElementByTagNameNR(item, "Ends")));
+  
+        String description = getElementText(getElementByTagNameNR(item, "Description"));
+  
+        Element seller = getElementByTagNameNR(item, "Seller");
+  
+        String sellerId = seller.getAttribute("UserID");
+        String sellerRating = seller.getAttribute("Rating");
+        String sellerLocation = getElementText(getElementByTagNameNR(item, "Location"));
+        String sellerCountry = getElementText(getElementByTagNameNR(item, "Country"));
+  
+        // output to Item
+        //System.out.printf("Item %s<>%s<>%s<>%s<>%s<>%s<>%s<>%s\n", itemId, name, buyPrice, firstPrice, started, ends, sellerId, description);
+        bwItem.write(itemId + sep + name + sep + buyPrice + sep + firstPrice + sep + started + sep + ends + sep + sellerId + sep + description + newline);
+  
+        // output to AuctionUser
+        //System.out.printf("AuctionUser %s<>%s<>%s<>%s\n", sellerId, sellerRating, sellerLocation, sellerCountry);
+        bwAuctionUser.write(sellerId + sep + sellerRating + sep + sellerLocation + sep + sellerCountry + newline);
+  
+        Element[] bidElements = getElementsByTagNameNR(getElementByTagNameNR(item, "Bids"), "Bid");
+        for (Element bid : bidElements) {
+  
+          Element bidder = getElementByTagNameNR(bid, "Bidder");
+  
+          String bidderId = bidder.getAttribute("UserID");
+          String bidderRating = bidder.getAttribute("Rating");
+
+          String bidderLocation = "NULL";
+          Element bidderLocationElement = getElementByTagNameNR(bidder, "Location");
+          if (bidderLocationElement != null) {
+            bidderLocation = getElementText(bidderLocationElement);
+          }
+          String bidderCountry = "NULL";
+          Element bidderCountryElement = getElementByTagNameNR(bidder, "Country");
+          if (bidderCountryElement != null) {
+            bidderCountry = getElementText(bidderCountryElement);
+          }
+  
+          String bidTime = formatTime(getElementText(getElementByTagNameNR(bid, "Time")));
+          String amount = formatDollar(getElementText(getElementByTagNameNR(bid, "Amount")));
+  
+          // output to AuctionUser
+          //System.out.printf("AuctionUser %s<>%s<>%s<>%s\n", bidderId, bidderRating, bidderLocation, bidderCountry);
+          bwAuctionUser.write(bidderId + sep + bidderRating + sep + bidderLocation + sep + bidderCountry + newline);
+  
+          // output to Bid
+          //System.out.printf("Bid %s<>%s<>%s<>%s\n", itemId, bidderId, bidTime, amount);
+          bwBid.write(itemId + sep + bidderId + sep + bidTime + sep + amount + newline);
+        }
+      }
+ 
+      bwItem.close();
+      bwItemCategory.close();
+      bwAuctionUser.close();
+      bwBid.close();
+    }
+    catch (IOException e) {
+      e.printStackTrace();
+    }
   }
-     
+  
   public static void main (String[] args) {
     if (args.length == 0) {
       System.out.println("Usage: java MyParser [file] [file] ...");

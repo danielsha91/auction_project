@@ -1,3 +1,9 @@
 #!/bin/sh
-java MyParser /usr/class/cs145/project/ebay_data/items-0.xml
-#java MyParser /usr/class/cs145/project/ebay_data/items-*.xml
+rm -f *.dat
+make clean && make
+#java MyParser /usr/class/cs145/project/ebay_data/items-0.xml
+java MyParser /usr/class/cs145/project/ebay_data/items-*.xml
+sort Item_raw.dat | uniq > Item.dat
+sort ItemCategory_raw.dat | uniq > ItemCategory.dat
+sort AuctionUser_raw.dat | uniq > AuctionUser.dat
+sort Bid_raw.dat | uniq > Bid.dat
