@@ -1,6 +1,3 @@
-TODO: research on auto increment key for sqlite
-
-
 ==============================================================================
 Part B
 
@@ -9,7 +6,7 @@ List of Relations
     - key: {id}
 - ItemCategory (itemId, category)
     - key: {itemId, category}
-- AuctionUser (id, rating, location, country)
+- AuctionUser (id, isSeller, isBidder, rating, location, country)
     - key: {id}
 - Bid (itemId, bidderId, bidTime, price)
     - key: {itemId, bidderId, bidTime}
