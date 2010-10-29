@@ -18,6 +18,8 @@ create table ItemCategory (
 
 create table AuctionUser (
     id text not null,
+    isSeller boolean not null,
+    isBidder boolean not null,
     rating integer not null,
     location text,
     country text,

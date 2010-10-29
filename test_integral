@@ -1,0 +1,23 @@
+#!/bin/sh
+
+echo 'runParser to generate loadfiles'
+./runParser
+
+echo 'prepare DB tables'
+/usr/class/cs145/bin/sqlite ./db/auction.db < drop.sql
+/usr/class/cs145/bin/sqlite ./db/auction.db < create.sql
+
+echo 'load data into DB tables'
+/usr/class/cs145/bin/sqlite ./db/auction.db < load.txt
+
+echo 'test query and compare with correct_output'
+rm -f test_output
+/usr/class/cs145/bin/sqlite ./db/auction.db < query1.sql >> test_output
+/usr/class/cs145/bin/sqlite ./db/auction.db < query2.sql >> test_output
+/usr/class/cs145/bin/sqlite ./db/auction.db < query3.sql >> test_output
+/usr/class/cs145/bin/sqlite ./db/auction.db < query4.sql >> test_output
+/usr/class/cs145/bin/sqlite ./db/auction.db < query5.sql >> test_output
+/usr/class/cs145/bin/sqlite ./db/auction.db < query6.sql >> test_output
+/usr/class/cs145/bin/sqlite ./db/auction.db < query7.sql >> test_output
+diff test_output correct_output
+rm -f test_output
