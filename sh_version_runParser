@@ -1,0 +1,16 @@
+#!/bin/sh
+
+rm -f ./*.dat
+make clean && make
+
+java MyParser /usr/class/cs145/project/ebay_data/items-*.xml
+
+sort Item_raw.dat           | uniq  > Item.dat
+sort ItemCategory_raw.dat   | uniq  > ItemCategory.dat
+sort Bid_raw.dat            | uniq  > Bid.dat
+sort AuctionSeller_raw.dat  | uniq  > AuctionSeller.dat
+sort AuctionBidder_raw.dat  | uniq  > AuctionBidder.dat
+python mergeBidderSeller.py         > AuctionUser.dat
+
+rm -f ./*_raw.dat
+rm -f AuctionSeller.dat AuctionBidder.dat

@@ -196,7 +196,7 @@ class MyParser {
     try {
       // prepare output file
       // these are not necessarily final load file
-      // instead, following steps like sort|uniq might be needed
+      // instead, following steps like sort & uniq might be needed
       BufferedWriter bwItem
         = new BufferedWriter(new FileWriter("./Item_raw.dat", true));
       BufferedWriter bwItemCategory
