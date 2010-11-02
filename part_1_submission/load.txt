@@ -1,0 +1,13 @@
+.separator <>
+
+.import Item.dat Item
+update Item set buyPrice=null where buyPrice="NULL";
+
+.import ItemCategory.dat ItemCategory
+
+.import AuctionUser.dat AuctionUser
+update AuctionUser set location=null where location="NULL";
+update AuctionUser set country=null where country="NULL";
+
+.import Bid.dat Bid
+

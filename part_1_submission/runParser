@@ -1,0 +1,66 @@
+#!/usr/bin/python -tt
+import sys
+import os
+
+sep = '<>'
+
+def main(argv):
+    # clean up folder
+    os.system('rm -f ./*.dat')
+
+    # compile and run parser to generate raw .dat files
+    os.system('make clean && make')
+    os.system('java MyParser /usr/class/cs145/project/ebay_data/items-*.xml')
+
+    # remove duplicate and merge bidder/seller file
+    os.system('sort Item_raw.dat           | uniq  > Item.dat')
+    os.system('sort ItemCategory_raw.dat   | uniq  > ItemCategory.dat')
+    os.system('sort Bid_raw.dat            | uniq  > Bid.dat')
+    os.system('sort AuctionSeller_raw.dat  | uniq  > AuctionSeller.dat')
+    os.system('sort AuctionBidder_raw.dat  | uniq  > AuctionBidder.dat')
+    mergeBidderSeller()
+
+    # clean up raw .dat files
+    os.system('rm -f ./*_raw.dat')
+    os.system('rm -f AuctionSeller.dat AuctionBidder.dat')
+
+
+def mergeBidderSeller():
+    outFile = open('AuctionUser.dat', 'w')
+
+    dictBidder = dictUser('AuctionBidder.dat')
+    dictSeller = dictUser('AuctionSeller.dat')
+
+    setBidderId = set(dictBidder.keys())
+    setSellerId = set(dictSeller.keys())
+    setBothId = setBidderId.intersection(setSellerId)
+
+    result = {}
+
+    for k in dictBidder.keys():
+        result[k] = [0, 1, dictBidder[k]]
+    for k in dictSeller.keys():
+        result[k] = [1, 0, dictSeller[k]]
+
+    for k in setBothId:
+        result[k] = [1, 1, result[k][-1]]
+
+    for k in result.keys():
+        outFile.write('%s%s%d%s%d%s%s\n' \
+                      %(k, sep, result[k][0], sep, \
+                        result[k][1], sep, result[k][-1]))
+
+    outFile.close()
+
+
+def dictUser(loadFileName):
+    dictUser = {}
+    for line in open(loadFileName):
+        segs = line.strip().split(sep)
+        dictUser[segs[0]] = sep.join(segs[1:])
+    return dictUser
+
+
+if __name__ == '__main__':
+    main(sys.argv)
+
