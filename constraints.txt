@@ -1,0 +1,33 @@
+K no two item can have the same id;
+
+K each item is attached with a category for at most once;
+
+K no two user can have the same id;
+
+K no auction may have two bids at the same time;  // itemid&datetime PK Bid
+
+R sellerId of an Item must correspond to an actual user in AuctionUser;
+
+R any item-category pair in table ItemCategory must refer to an actual item;
+
+R itemId mentioned in a Bid must correspond to an actual item;
+
+R userId mentioned in a Bid must correspond to an actual user;
+
+T start time of an auction must be earlier than end time;
+
+T start time of an auction must be earlier than current time;  // only true for
+previous data, later of course seller can specify a start time later than
+current time
+
+T any user with Id appeared in Item table must be a seller;
+
+T any user with id appeared in Bid table must be a bidder;
+
+T dateTime in Bid must be later than started in Item with same itemId, and
+earlier than current time;
+
+T a bidding price on an item must be higher than the current price;
+
+T a seller cannot bid on the item he/she listed to sell;
+

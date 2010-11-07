@@ -1,0 +1,16 @@
+#!/bin/sh
+
+#
+/usr/class/cs145/bin/sqlite auction.db < drop.sql
+/usr/class/cs145/bin/sqlite auction.db < constraints_create.sql
+/usr/class/cs145/bin/sqlite auction.db < load.txt
+
+# verify referential integrity
+/usr/class/cs145/bin/sqlite auction.db < constraints_verify.sql
+
+# test run modifications comforming to constraints
+/usr/class/cs145/bin/sqlite auction.db < constraints_good.sql
+
+# test run modifications violating constraints
+/usr/class/cs145/bin/sqlite auction.db < constraints_bad.sql
+
