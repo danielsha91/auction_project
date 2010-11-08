@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#
+# load data into table
 /usr/class/cs145/bin/sqlite auction.db < drop.sql
 /usr/class/cs145/bin/sqlite auction.db < constraints_create.sql
 /usr/class/cs145/bin/sqlite auction.db < load.txt
@@ -14,3 +14,21 @@
 # test run modifications violating constraints
 /usr/class/cs145/bin/sqlite auction.db < constraints_bad.sql
 
+# test run triggers
+/usr/class/cs145/bin/sqlite auction.db < trigger1_add.sql
+/usr/class/cs145/bin/sqlite auction.db < trigger1_drop.sql
+/usr/class/cs145/bin/sqlite auction.db < trigger2_add.sql
+/usr/class/cs145/bin/sqlite auction.db < trigger2_drop.sql
+/usr/class/cs145/bin/sqlite auction.db < trigger3_add.sql
+/usr/class/cs145/bin/sqlite auction.db < trigger3_drop.sql
+
+# regression test again
+rm -f test_output
+/usr/class/cs145/bin/sqlite ./auction.db < query1.sql >> test_output
+/usr/class/cs145/bin/sqlite ./auction.db < query2.sql >> test_output
+/usr/class/cs145/bin/sqlite ./auction.db < query3.sql >> test_output
+/usr/class/cs145/bin/sqlite ./auction.db < query4.sql >> test_output
+/usr/class/cs145/bin/sqlite ./auction.db < query5.sql >> test_output
+/usr/class/cs145/bin/sqlite ./auction.db < query6.sql >> test_output
+/usr/class/cs145/bin/sqlite ./auction.db < query7.sql >> test_output
+diff test_output correct_output
