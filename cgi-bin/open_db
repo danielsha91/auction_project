@@ -1,0 +1,2 @@
+#!/bin/sh
+/usr/class/cs145/bin/sqlite auction.db
