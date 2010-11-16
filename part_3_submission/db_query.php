@@ -113,6 +113,42 @@ function bidIsOpen($itemId) {
 
 
 /**
+ *  Find the current price of a bid
+ *  max(firstPrice, max(bid price))
+ *  Return value is float number
+ */
+function getCurrentPrice($itemId) {
+    try {
+        $db = dbConnect();
+        $db->beginTransaction();
+
+        // get first price from Item
+        $rItem = $db->query("select * from Item where id=\"".$itemId.
+                            "\"")->fetchAll();
+        $firstPrice = $rItem[0]["firstPrice"];
+
+        // get highest bid price
+        $rBid = $db->query("select * from Bid where itemId=\"".$itemId.
+                           "\" order by price desc")->fetchAll();
+        $lastBidPrice = $rBid[0]["price"];
+
+        $result = max((float)$firstPrice, (float)$lastBidPrice);
+
+        $db->commit();
+        $db = null;
+
+        return $result;
+    }
+    catch (PDOExcepeion $e) {
+        try {
+            $db->rollback();
+        } catch (PDOException $pe) {}
+        echo "Failed in function bidIsOpen: ".$e->getMessage();
+    }
+}
+
+
+/**
  *  Find the winner of a bid
  *  return userId if exists, and empty string otherwise
  */

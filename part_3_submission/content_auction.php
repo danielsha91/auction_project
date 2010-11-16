@@ -54,11 +54,12 @@ function display_item_info($r) {
 
 function display_bid_status($db, $itemId) {
     echo "<h4>Auction Status</h4>";
+
     $isOpen = bidIsOpen($itemId);
     echo "<table width=\"100%\" border=\"1\">";
     echo "<tr><td>";
     if ($isOpen) {
-        echo "Still going on";
+        echo "Auction still going on, <a href=\"bid.php\">bid now!</a>";
     }
     else {
         $result       = bidWinner($itemId);

@@ -2,12 +2,10 @@
 <table><tr>
 
 <td>
-<p>Search
+<p>
 <select size="1" name="searchType">
     <option selected value="ItemID">ItemID</option>
-    <option value="Item">Item</option>
-    <option value="Category">Category</option>
-    <option value="User">User</option>
+    <option value="UserID">UserID</option>
 </select>
 </p>
 </td>
@@ -17,7 +15,7 @@
 </td>
 
 <td>
-<input type="submit" value="GO!">
+<input type="submit" value="Quick Search!">
 </td>
 
 </tr></table>

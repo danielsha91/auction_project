@@ -6,12 +6,13 @@
 
     $query  = "select category, count(*) " .
               "from ItemCategory group by category " .
-              "order by count(*) desc limit 5";
+              "order by count(*) desc limit 7";
     $result = $db->prepare($query);
     $result->execute();
 
     foreach ($result as $row) {
-        echo '<p><a href="http://www.google.com">' .
+        echo "<p><a href=\"http://shop.ebay.com/?_nkw=".
+             $row['category'] . "\">" .
              $row['category'] . ' (' .
              $row['count(*)'] .
              ')</a></p>';

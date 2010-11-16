@@ -11,11 +11,7 @@ try {
         include("./content_auction.php");
         content_auction($db, $query);
     }
-    else if ($searchType == "Category") {
-        $category = $query;
-        echo "under construction";
-    }
-    else if ($searchType == "User") {
+    else if ($searchType == "UserID") {
         include("./content_user.php");
         content_user($db, $query);
     }
