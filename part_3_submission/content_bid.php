@@ -69,8 +69,16 @@ function handle_bid($db, $itemId, $userId, $bidPrice) {
     $rBid = $db->query("select * from Bid where itemId=\"".$itemId.
                        "\" order by price desc")->fetchAll();
     $lastBidPrice = $rBid[0]["price"];;
-    $firstPrice  = $rItem[0]["firstPrice"];
-    $buyPrice    = $rItem[0]["buyPrice"];
+    $lastBidTime  = $rBid[0]["bidTime"];
+    $firstPrice   = $rItem[0]["firstPrice"];
+    $buyPrice     = $rItem[0]["buyPrice"];
+
+    // check latest bid time is older than current time
+    if ($lastBidTime >= $currTime) {
+        echo "Sorry, there are bids in the future @_@, " .
+             "please check current time";
+        return;
+    }
 
     // check bid price is higher than first price, current price
     $currentPrice = max((float)$firstPrice, (float)$lastBidPrice);
